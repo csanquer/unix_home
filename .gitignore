@@ -1,0 +1,16 @@
+.svn
+_svn
+.CVS
+.arch-params
+.bzr
+_darcs
+.hg
+.monotone
+.svn
+_svn
+.DS_Store
+.settings
+.buildpath
+.project
+.cache
+nbproject

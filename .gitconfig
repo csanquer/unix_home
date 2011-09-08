@@ -1,0 +1,41 @@
+[user]
+	name = 
+	email = 
+[color]
+	ui = true
+	status = true
+	diff = true
+	branch = true
+	interactive = true
+	pager = true
+[core]
+	excludesfile = ~/.gitignore
+	autocrlf = false
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	fc = fetch
+	mg = merge
+    rb = rebase
+    rs = reset
+    rv = revert
+    pl = pull
+	ps = push
+    unstage = reset HEAD --
+    us = unstage
+	lg = log --graph
+	last = log -1 HEAD
+    unmodify = checkout --
+    um = unmodify
+	cf = cat-file -p
+    lgp = log --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset%s %C(blue)(%an)%Creset %Cgreen(%cd - %cr)%Creset' --abbrev-commit --date=local
+	trackbranch = branch --set-upstream
+	pushtrack = push -u 
+[diff]
+#	tool = vimdiff
+	tool = meld
+[merge]
+#	tool = vimdiff
+	tool = meld
