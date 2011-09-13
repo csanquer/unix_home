@@ -24,11 +24,11 @@
     pl = pull
 	ps = push
     unstage = reset HEAD --
-    us = unstage
+    us = reset HEAD --
 	lg = log --graph
 	last = log -1 HEAD
     unmodify = checkout --
-    um = unmodify
+    um = checkout --
 	cf = cat-file -p
     lgp = log --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset%s %C(blue)(%an)%Creset %Cgreen(%cd - %cr)%Creset' --abbrev-commit --date=local
 	trackbranch = branch --set-upstream
