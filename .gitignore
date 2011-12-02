@@ -15,4 +15,5 @@ __MACOSX
 .project
 .cache
 nbproject
+/.netbeans/
 catalog.xml
