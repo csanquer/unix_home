@@ -193,11 +193,13 @@ enable-auto-props = yes
 *.css        = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/css
 *.dtd        = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/xml
 *.html       = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/html
+*.twig       = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/html
 *.ini        = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/plain
 *.sql        = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/x-sql
 *.txt        = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/plain
 *.xhtml      = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/xhtml+xml
 *.xml        = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/xml
+*.xliff      = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/xml
 *.xsd        = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/xml
 *.xsl        = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/xml
 *.xslt       = svn:eol-style=LF; svn:keywords=Id; svn:mime-type=text/xml
