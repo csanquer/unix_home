@@ -1,5 +1,6 @@
 #!/bin/sh
 alias vi='vim'
+alias suvi='sudo vim'
 alias emacs='emacs -nw'
 alias suemacs='sudo emacs -nw'
 alias ls='ls --color=auto'
