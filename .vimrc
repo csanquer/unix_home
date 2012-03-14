@@ -1,3 +1,6 @@
+" use autoload pathogen.vim from https://github.com/tpope/vim-pathogen
+call pathogen#infect()
+
 " Basics
 set nocompatible        " must be first line
 
@@ -8,7 +11,12 @@ if has('win32') || has('win64')
   set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
 
-set background=dark         " Assume a dark background
+if &term == "builtin_gui"
+    set background=light
+else
+    set background=dark
+endif
+"set background=dark         " Assume a dark background
 "set term=builtin_ansi       " Make arrow and other keys work
 filetype plugin indent on   " Automatically detect file types.
 syntax on                   " syntax highlighting
@@ -87,8 +95,9 @@ set softtabstop=4
 set shiftwidth=4                " use indents of 4 spaces
 set expandtab                   " tabs are spaces
 
-"toggle line number
-nmap <F11> :set number! number?<cr> 
+nmap <F11> :set number! number?<cr>
 "set matchpairs+=<:>              " match, to be used with %
 set pastetoggle=<F12>             " pastetoggle (sane indentation on pastes)
 "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
+
+nmap <silent> <F2> :NERDTreeToggle<CR>
