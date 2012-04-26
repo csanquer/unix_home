@@ -13,6 +13,11 @@
     autocrlf = input
     editor = vim
 [alias]
+    subupdate = submodule update --init --recursive
+    subup = submodule update --init --recursive
+    cloner = clone --recursive
+    clr = clone --recursive
+    cl = clone
     co = checkout
     br = branch
     ci = commit
