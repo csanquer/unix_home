@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+# use redcarpet 
+# gem install redcarpet
+browser = "google-chrome"
+raise "gime a file!!" unless ARGV[0]
+exec "redcarpet #{ARGV[0]} > /tmp/markdown.html && #{browser} /tmp/markdown.html"
