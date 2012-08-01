@@ -29,10 +29,13 @@
     rv = revert
     pl = pull
     ps = push
+    fix = commit --amend
     unstage = reset HEAD --
     us = reset HEAD --
+    staged = diff --cached
     lg = log --graph
     last = log -1 HEAD
+    tip = log -n 1 --abbrev-commit --decorate
     unmodify = checkout --
     um = checkout --
     cf = cat-file -p
