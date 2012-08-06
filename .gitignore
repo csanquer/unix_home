@@ -10,6 +10,7 @@ _darcs
 _svn
 .DS_Store
 __MACOSX
+.directory
 .settings
 .buildpath
 .project
