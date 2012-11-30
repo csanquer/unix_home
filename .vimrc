@@ -95,7 +95,7 @@ set softtabstop=4
 set shiftwidth=4                " use indents of 4 spaces
 set expandtab                   " tabs are spaces
 
-nmap <F11> :set number! number?<cr>
+nmap <F10> :set number! number?<cr>
 "set matchpairs+=<:>              " match, to be used with %
 set pastetoggle=<F12>             " pastetoggle (sane indentation on pastes)
 "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
