@@ -21,6 +21,9 @@
     co = checkout
     br = branch
     ci = commit
+    cim = commit -m
+    cia = commit -a
+    ciam = commit -am
     st = status
     fc = fetch
     mg = merge
@@ -29,7 +32,11 @@
     rv = revert
     pl = pull
     ps = push
+    sh = show --color-words
+    psom = push origin master
+    ignore = "!echo >> $GIT_PREFIX/.gitignore"
     fix = commit --amend
+    amend = commit --amend
     unstage = reset HEAD --
     us = reset HEAD --
     staged = diff --cached
@@ -37,7 +44,10 @@
     last = log -1 HEAD
     tip = log -n 1 --abbrev-commit --decorate
     unmodify = checkout --
+    undo = checkout --
+    un = checkout --
     um = checkout --
+    rd  = !git ls-files -z --deleted | xargs -0 git rm
     cf = cat-file -p
     lgp = log --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset%s %C(blue)(%an)%Creset %Cgreen(%cd - %cr)%Creset' --abbrev-commit --date=local
     trackbranch = branch --set-upstream
