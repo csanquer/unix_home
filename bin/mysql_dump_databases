@@ -1,0 +1,107 @@
+#!/bin/bash
+
+user=root
+password=
+zipped=0
+
+#########################################
+###          options processing       ###
+#########################################
+
+# display help
+function printHelp()
+{
+  cat << EOF
+dump all mysql databases
+USAGE : $0 [-h] [-u MYSQL_USER_NAME] [-p MYSQL_USER_PASSWORD]
+options availables : 
+  -h    :   print this help
+  -u    :   mysql user name default = 'root'
+  -p    :   mysql user password default = ''
+  -z    :   bzipped dump
+EOF
+  
+  exit
+  # to complete
+}
+
+# check required parameter number
+if [ $# -lt 0 ] ; 
+then
+  printHelp;
+fi
+
+# process options 
+# pattern => letter = option ; letter with ':' = option with required parameter
+# example "hcd:o:" => h and c don't require parameter but d and o require parameter
+# var $OPTIND is options index 
+#     $OPTARG is option parameter value 
+while getopts  "hu:p:z" flag
+do
+ # debug
+ # echo "$flag" $OPTIND $OPTARG
+  case $flag in 
+
+    # disply help if -h or unknown option
+    h|\?)
+      printHelp 
+      ;;
+    #to complete ....
+    
+    p)
+      password=$OPTARG
+      ;;
+    u)
+      user=$OPTARG
+      ;;
+      
+    z)
+      zipped=1
+      ;;
+
+    # all others cases
+    *)
+      ;;
+  esac
+done
+# remove options from command line parameters
+shift `expr $OPTIND - 1`
+
+# process arguments
+
+#if [ $# -lt 1 ] ; 
+#then
+#  printHelp
+#  exit 0;
+#fi
+
+
+#########################################
+
+read -p "dump all mysql databases (y/n) ? " choice
+case "$choice" in 
+  y|Y )
+    if [ -z $password ];
+    then
+        mysqlauth="-u$user"
+    else
+        mysqlauth="-u$user -p$password"
+    fi
+#    mysql $mysqlauth -e 'show databases' | grep -Ev "^(Database|information_schema|mysql|performance_schema|phpmyadmin|test)$"
+    databases=`mysql $mysqlauth -e 'show databases' | grep -Ev "^(Database|information_schema|mysql|performance_schema|phpmyadmin|test)$"`
+    for db in $databases; do
+        mysqldump $mysqlauth --force --opt $db |  perl -pe 's/\),\(/),\n(/og' > "$db.sql"
+	    if [ $zipped == 1 ]; then
+		    tar -cvjf $db.tar.bz $db.sql
+		    rm $db.sql
+       	fi    
+    done
+    ;;
+  n|N ) 
+    exit 1
+    ;;
+  * )
+    exit 1
+    ;;
+esac
+
