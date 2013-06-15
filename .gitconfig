@@ -64,7 +64,10 @@
 # git remove manually deleted files
     rd  = !git ls-files -z --deleted | xargs -0 git rm
     cf = cat-file -p
-    trackbranch = branch --set-upstream
+    # git 1.7 :  git upstream local_branch remote/branch
+    #upstream = branch --set-upstream
+    # git 1.8 : git upstream remote/branch local_branch
+    upstream = branch -u
     pushtrack = push -u 
 [diff]
     tool = vimdiff
