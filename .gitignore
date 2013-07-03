@@ -16,7 +16,7 @@ __MACOSX
 .project
 .cache
 nbproject
-/.netbeans/
+.netbeans
 catalog.xml
 *.psd
 *~

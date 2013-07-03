@@ -78,3 +78,5 @@
 [mergetool "meld3"]
         cmd = $HOME/bin/meld3 $BASE $LOCAL $REMOTE $MERGED
 
+[push]
+	default = matching
