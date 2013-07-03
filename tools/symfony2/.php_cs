@@ -7,11 +7,11 @@ $finder = Symfony\CS\Finder\DefaultFinder::create()
       'vendor',
       'web/images',
       'web/uploads',
+      'app/cache',
+      'app/log',
     ))
     ->notName('/.*\.(ico|gif|png|jpeg|jpg|bmp|tiff|mp3|wma|wmv|avi|flv|swf|zip|bz2|gz|tar|7z|lzma|doc|docx|csv|xls|xlsx|ppt|pptx|odt|log|phar|jar)/')
-    ->in(array(
-        __DIR__.'/src',
-    ))
+    ->in(__DIR__.'/src')
 ;
 
 return Symfony\CS\Config\Config::create()
@@ -19,7 +19,7 @@ return Symfony\CS\Config\Config::create()
         'indentation',
         'linefeed',
         'trailing_spaces',
-        'unused_use'
+        'unused_use',
         'phpdoc_params',
         'visibility',
         'return',
