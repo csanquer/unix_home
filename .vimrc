@@ -1,5 +1,5 @@
 " use autoload pathogen.vim from https://github.com/tpope/vim-pathogen
-call pathogen#infect()
+#call pathogen#infect()
 
 " Basics
 set nocompatible        " must be first line
@@ -7,9 +7,9 @@ set nocompatible        " must be first line
 " Windows Compatible
 " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
 " across (heterogeneous) systems easier.
-if has('win32') || has('win64')
-  set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
-endif
+"if has('win32') || has('win64')
+"  set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+"endif
 
 if &term == "builtin_gui"
     set background=light
@@ -100,4 +100,4 @@ nmap <F10> :set number! number?<cr>
 set pastetoggle=<F12>             " pastetoggle (sane indentation on pastes)
 "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 
-nmap <silent> <F2> :NERDTreeToggle<CR>
+"nmap <silent> <F2> :NERDTreeToggle<CR>
