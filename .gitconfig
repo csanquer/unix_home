@@ -32,6 +32,7 @@
     sh = show --color-words
     df = diff
     hp = help
+    man = help
 # a common task !!
     psom = push origin master
 # diff and log helpers
