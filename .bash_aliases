@@ -26,6 +26,7 @@ alias csvni='csvn --ignore-externals'
 alias svnvimdiff='svn diff --diff-cmd ~/bin/diffwrap.sh'
 alias svnvimmerge='svn merge --diff3-cmd  ~/bin/diff3wrap.sh'
 alias findsvn='find . -type d -name .svn'
+alias findcrlf='grep -IUr --color ""'
 alias findmac='find . \( -type d -name "__MACOSX" \) -o \( -type f -name ".DS_Store" \)'
 alias rmt='trash-put'
 alias rmmac='rm -rf `find . \( -type d -name "__MACOSX" \) -o \( -type f -name ".DS_Store" \)`'
