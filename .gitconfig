@@ -13,6 +13,10 @@
     autocrlf = input
     editor = vim
 [alias]
+# show aliases
+    alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\t=> \\2/' | sort
+# make the current directory a new repo and commit the first import
+    this = !git init && git add . && git commit -m \"initial commit\"   
 # shortcuts
     cl = clone
     co = checkout
@@ -21,6 +25,8 @@
     cim = commit -m
     cia = commit -a
     ciam = commit -am
+    cip = commit -p
+    ciap = commit -a -p
     st = status
     fc = fetch
     mg = merge
@@ -28,6 +34,8 @@
     rs = reset
     rv = revert
     pl = pull
+    pr = pull --rebase
+    ready = rebase -i @{u}
     ps = push
     sh = show --color-words
     df = diff
@@ -48,7 +56,7 @@
     cloner = clone --recursive
     clr = clone --recursive
 # add file to gitignore
-    ignore = "!echo >> $GIT_PREFIX/.gitignore"
+    ignore =!([ ! -e .gitignore ] && touch .gitignore) | echo $1 >>.gitignore
 # amend last not pushed commit 
     fix = commit --amend
     amend = commit --amend
