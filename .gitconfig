@@ -64,12 +64,10 @@
     unstage = reset HEAD --
     us = reset HEAD --
 # discard changes (modified files but not to be committed) 
-    unmodify = checkout --
     undo = checkout --
     discard = checkout --
     ds = checkout --
     un = checkout --
-    um = checkout --
 # git remove manually deleted files
     rd  = !git ls-files -z --deleted | xargs -0 git rm
     cf = cat-file -p
