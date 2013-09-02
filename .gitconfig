@@ -50,6 +50,9 @@
     lgp = log --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset%s %C(blue)(%an)%Creset %Cgreen(%cd - %cr)%Creset' --abbrev-commit --date=local
     last = log -1 HEAD
     tip = log -n 1 --abbrev-commit --decorate
+    changelog-html = log --no-merges --date=short --format='<li id=\"%h\"><time>%ad</time> %s</li>'
+    changelog-md-full =  log --no-merges --date=short --format='* %h %ad %s (%cN)'
+    changelog-md =  log --no-merges --date=short --format='* %ad %s'
 # sudmodules management
     subupdate = submodule update --init --recursive
     subup = submodule update --init --recursive
