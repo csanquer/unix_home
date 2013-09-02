@@ -44,8 +44,8 @@ else
         for file in $configFiles
         do
             if [ -f $file ]; then
-                sed  -i 's/^\(\s*\)\('"$versionKeyword"':\)\s*.*$/\1\2 '"\""''"$version"''"\""'/' $file
-                sed  -i 's/^\(\s*\)\('"$versionDateKeyword"':\)\s*.*$/\1\2 '"\""''"$versionDate"''"\""'/' $file
+                sed  -i 's/^\(\s*\)#\?\(\s*\)\('"$versionKeyword"':\)\s*.*$/\1\2\3 '"\""''"$version"''"\""'/' $file
+                sed  -i 's/^\(\s*\)#\?\(\s*\)\('"$versionDateKeyword"':\)\s*.*$/\1\2\3 '"\""''"$versionDate"''"\""'/' $file
             fi
         done
     fi
