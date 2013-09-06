@@ -1,6 +1,27 @@
 #!/bin/bash
 
 #########################################
+###       Bash script location        ###
+#########################################
+
+# current script command line call
+scriptCall="$(readlink -f ${BASH_SOURCE[0]})"
+# directory of the script
+scriptDir="$(dirname $scriptCall)"
+# script base name
+scriptName="$(basename $scriptCall)"
+
+#########################################
+###  import variable configuration    ###
+#########################################
+
+CONFIG_FILE=my_script.conf
+
+if [[ -f $CONFIG_FILE ]]; then
+    . $CONFIG_FILE
+fi
+
+#########################################
 ###          options processing       ###
 #########################################
 
@@ -19,12 +40,13 @@ EOF
 }
 
 # check required parameter number
-if [ $# -lt 0 ] ; 
+if [[ $# -lt 0 ]] ; 
 then
   printHelp;
 fi
 
-# process options 
+# process options
+#
 # pattern => letter = option ; letter with ':' = option with required parameter
 # example "hcd:o:" => h and c don't require parameter but d and o require parameter
 # var $OPTIND is options index 
@@ -35,7 +57,7 @@ do
  # echo "$flag" $OPTIND $OPTARG
   case $flag in  
 
-    # disply help if -h or unknown option
+    # display help if -h or unknown option
     h|\?)
       printHelp 
       ;;  
@@ -61,3 +83,7 @@ fi
 arg1=$1
 
 ########################################
+###          Main program            ###
+########################################
+
+
