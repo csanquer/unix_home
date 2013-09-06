@@ -1,25 +1,36 @@
 #!/bin/bash
 
+#########################################
+###       Bash script location        ###
+#########################################
+
+# current script command line call
+scriptCall="$(readlink -f ${BASH_SOURCE[0]})"
+# directory of the script
+scriptDir="$(dirname $scriptCall)"
+# script base name
+scriptName="$(basename $scriptCall)"
+
+#########################################
+###  import variable configuration    ###
+#########################################
+
+#CONFIG_FILE=my_script.conf
+
+#if [[ -f $CONFIG_FILE ]]; then
+#    . $CONFIG_FILE
+#fi
+
+#########################################
+
 phpbin=php
 curlbin=curl
-
-composerOptions='--prefer-source --no-dev --optimize-autoloader'
-#composerOptions='--prefer-dist  --no-dev --optimize-autoloader'
 
 assetOptions='--symlink --relative'
 #assetOptions=''
 
-#get or update composer locally
-if [ -f composer.phar ]; then
-    $phpbin composer.phar self-update
-else
-    $curlbin -sS https://getcomposer.org/installer | $phpbin 
-fi
-
-# update vendors
-if [ -f composer.phar ]; then
-    $phpbin composer.phar install $composerOptions
-fi
+#install vendors
+bash composer.sh
 
 # clear cache
 $phpbin app/console cache:clear --env=dev
