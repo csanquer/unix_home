@@ -19,6 +19,7 @@ field=
 createTag=0
 commit=HEAD
 defaultTag=0.1.0
+quiet=0
 
 #########################################
 ###          options processing       ###
@@ -35,7 +36,8 @@ options availables :
   -f : version field to increment (patch : v0.0.x , minor : v0.x.0 , major : vx.0.0 )
   -a : create git tag 
   -c : tag to create will refer this commit
-  -d : default tag to use  
+  -d : default tag to use 
+  -q : output only the next tag
 EOF
 
   exit
@@ -54,7 +56,7 @@ fi
 # example "hcd:o:" => h and c don't require parameter but d and o require parameter
 # var $OPTIND is options index 
 #     $OPTARG is option parameter value 
-while getopts  "hf:ac:d:" flag
+while getopts  "hf:ac:d:q" flag
 do
  # debug
  # echo "$flag" $OPTIND $OPTARG
@@ -76,6 +78,9 @@ do
     d)
       defaultTag=$OPTARG
       ;;  
+    q)
+      quiet=1
+      ;;
     # all others cases
     *)
       ;;
@@ -104,8 +109,10 @@ currentFullTag=`git describe --tags 2> /dev/null`
 if [ "$currentTag" != "$currentFullTag" -o -z "$currentTag" ]; then
     tag=$(echo $currentTag | awk 'match($0, /[0-9]+(\.[0-9]+)+/) { print substr( $0, RSTART, RLENGTH )}')
     
-    echo current Full Tag : $currentFullTag
-    echo current Tag : $currentTag
+    if [[ $quiet -eq 0 ]] ; then
+        #echo current Full Tag : $currentFullTag
+        echo current Tag : $currentTag
+    fi
     
     if [[ -n "$tag" ]] ; then 
         if [ "$field" != 'patch' -a "$field" != 'minor' -a "$field" != 'major' ] ; then 
@@ -149,15 +156,23 @@ if [ "$currentTag" != "$currentFullTag" -o -z "$currentTag" ]; then
 
     nextTag=v$nextTag
 
-    echo next Tag : $nextTag
+    if [[ $quiet -eq 0 ]] ; then
+        echo next Tag : $nextTag
+    else 
+        echo $nextTag
+    fi
 
     if [[ $createTag -eq 1 ]] ; then
-        echo creating tag $nextTag in git repository on commit $commit
+        if [[ $quiet -eq 0 ]] ; then
+           echo creating tag $nextTag in git repository on commit $commit
+        fi
         git tag $nextTag $commit -m "$nextTag $field version"
     fi
 else
-    echo you are already on the latest tag $currentTag
+    if [[ $quiet -eq 0 ]] ; then
+        echo you are already on the latest tag $currentTag
+#    else
+#        echo $currentTag
+    fi
 fi
-
-
 
