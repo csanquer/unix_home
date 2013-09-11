@@ -12,15 +12,7 @@ scriptDir="$(dirname $scriptCall)"
 scriptName="$(basename $scriptCall)"
 
 #########################################
-###  import variable configuration    ###
-#########################################
-
-#CONFIG_FILE=my_script.conf
-
-#if [[ -f $CONFIG_FILE ]]; then
-#    . $CONFIG_FILE
-#fi
-
+###      default config variable      ###
 #########################################
 
 # disable apc in cli mode to avoid composer errors
@@ -34,6 +26,9 @@ globalcomposerbin=composer
 #curlOptions="--proxy <[protocol://][user@password]proxyhost[:port]> "
 curlOptions=""
 
+########################################
+###          Main program            ###
+########################################
 
 ########################### Composer arguments #################################
 composerCommand=

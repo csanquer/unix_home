@@ -30,7 +30,7 @@ function printHelp()
 {
   cat << EOF
 help
-USAGE : $0 [-h] [-f <field>] [-a] [-c <commit>] [-d <default-tag>]
+USAGE : $0 [-h] [-f <field>] [-a] [-c <commit>] [-d <default-tag>] [-q]
 options availables : 
   -h : print this help
   -f : version field to increment (patch : v0.0.x , minor : v0.x.0 , major : vx.0.0 )
