@@ -4,12 +4,28 @@
 ###       Bash script location        ###
 #########################################
 
+realpath() {
+  OURPWD=$PWD
+  cd "$(dirname "$1")"
+  LINK=$(readlink "$(basename "$1")")
+  while [ "$LINK" ]; do
+    cd "$(dirname "$LINK")"
+    LINK=$(readlink "$(basename "$1")")
+  done
+  REALPATH="$PWD/$(basename "$1")"
+  cd "$OURPWD"
+  echo "$REALPATH"
+}
+
 # current script command line call
-scriptCall="$(readlink -f ${BASH_SOURCE[0]})"
+#Work for GNU Linux and BSD and MacOSX
+scriptCall="$(realpath "${BASH_SOURCE[0]}")"
+# only work on GNU Linux
+#scriptCall="$(readlink -f ${BASH_SOURCE[0]})"
 # directory of the script
-scriptDir="$(dirname $scriptCall)"
+scriptDir=$(dirname "$scriptCall")
 # script base name
-scriptName="$(basename $scriptCall)"
+scriptName=$(basename "$scriptCall")
 
 #########################################
 ###  import variable configuration    ###
