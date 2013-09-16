@@ -1,0 +1,9 @@
+#!/bin/bash
+ls | while read -r FILE
+do
+oldname=$FILE
+newname=`echo ${FILE} | iconv -f utf-8 -t ASCII//translit -c | sed -e 's/[^A-Za-z0-9._-]/_/g' | sed -e 's/_+/_/g'`
+if [[ $oldname != $newname ]]; then
+    mv -v "$oldname" "$newname"
+fi
+done
