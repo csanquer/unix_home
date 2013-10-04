@@ -28,6 +28,21 @@ scriptDir=$(dirname "$scriptCall")
 scriptName=$(basename "$scriptCall")
 
 #########################################
+###        OS basic detection         ###
+#########################################
+
+case "$OSTYPE" in
+  linux*)   currentOS="linux";;
+  darwin*)  currentOS="macosx";;
+  solaris*) currentOS="solaris";;
+  cygwin)   currentOS="windows";;
+  win*)     currentOS="windows";;
+  freebsd*) currentOS="bsd";;
+  bsd*)     currentOS="bsd";;
+  *)        currentOS="unknown";;
+esac
+
+#########################################
 ###      default config variable      ###
 #########################################
 
@@ -41,6 +56,12 @@ defaultVersion=
 version=
 versionDate=
 assetVersionDate=
+
+if [ "$currentOS" == 'macosx' -o "$currentOS" == 'bsd' ] ; then
+    sedcmd="sed -i ''"
+else
+    sedcmd="sed -i"
+fi
 
 #########################################
 ###          options processing       ###
@@ -126,12 +147,22 @@ else
     # test if current directory is a git repository
     if [ -d .git ]; then
         versionDate=`git log -1 --pretty=format:'%ci' --date=local`
+        versionTimestamp=`git log -1 --pretty=format:'%ct' --date=local`
         if [ $? != 0 ]; then
-            versionDate=`date +"%F %T %z"`
+            if [ "$currentOS" == 'macosx' -o "$currentOS" == 'bsd' ] ; then
+                versionDate=`date "+%F %T %z"`
+            else
+                versionDate=`date "+%F %T %z"`
+            fi
         fi
-        
-        assetVersionDate=`date +"%Y%m%d%H%M%S" --date="$versionDate"`
-        
+
+        if [ "$currentOS" == 'macosx' -o "$currentOS" == 'bsd' ] ; then
+            assetVersionDate=`date -r $versionTimestamp "+%Y%m%d%H%M%S" `
+        else
+            #assetVersionDate=`date "+%Y%m%d%H%M%S" --date="@$versionTimestamp"`
+            assetVersionDate=`date "+%Y%m%d%H%M%S" --date="$versionDate"`
+        fi
+
         #only based on tags
         version=`git describe --tags 2> /dev/null`
         if [ $? != 0 ]; then
@@ -163,9 +194,9 @@ else
         for file in $configFiles
         do
             if [ -f $file ]; then
-                sed  -i'' 's/^\(\s*\)#\?\(\s*\)\('"$versionKeyword"':\)\s*.*$/\1\2\3 '"\""''"$version"''"\""'/' $file
-                sed  -i'' 's/^\(\s*\)#\?\(\s*\)\('"$versionDateKeyword"':\)\s*.*$/\1\2\3 '"\""''"$versionDate"''"\""'/' $file
-                sed  -i'' 's/^\(\s*\)#\?\(\s*\)\('"$assetVersionDateKeyword"':\)\s*.*$/\1\2\3 '"\""''"$assetVersionDate"''"\""'/' $file
+                $sedcmd 's/^\(\s*\)#\?\(\s*\)\('"$versionKeyword"':\)\s*.*$/\1\2\3 '"\""''"$version"''"\""'/' $file
+                $sedcmd 's/^\(\s*\)#\?\(\s*\)\('"$versionDateKeyword"':\)\s*.*$/\1\2\3 '"\""''"$versionDate"''"\""'/' $file
+                $sedcmd 's/^\(\s*\)#\?\(\s*\)\('"$assetVersionDateKeyword"':\)\s*.*$/\1\2\3 '"\""''"$assetVersionDate"''"\""'/' $file
             fi
         done
     fi

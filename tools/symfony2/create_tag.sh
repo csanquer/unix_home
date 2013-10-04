@@ -28,6 +28,21 @@ scriptDir=$(dirname "$scriptCall")
 scriptName=$(basename "$scriptCall")
 
 #########################################
+###        OS basic detection         ###
+#########################################
+
+case "$OSTYPE" in
+  linux*)   currentOS="linux";;
+  darwin*)  currentOS="macosx";;
+  solaris*) currentOS="solaris";;
+  cygwin)   currentOS="windows";;
+  win*)     currentOS="windows";;
+  freebsd*) currentOS="bsd";;
+  bsd*)     currentOS="bsd";;
+  *)        currentOS="unknown";;
+esac
+
+#########################################
 ###      default config variable      ###
 #########################################
 
