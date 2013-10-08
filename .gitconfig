@@ -41,6 +41,7 @@
     df = diff
     hp = help
     man = help
+    bs = bisect
 # a common task !!
     psom = push origin master
 # diff and log helpers
