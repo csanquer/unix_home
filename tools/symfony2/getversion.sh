@@ -32,18 +32,26 @@ scriptName=$(basename "$scriptCall")
 #########################################
 
 case "$OSTYPE" in
-  linux*)   currentOS="linux";;
-  darwin*)  currentOS="macosx";;
-  solaris*) currentOS="solaris";;
-  cygwin)   currentOS="windows";;
-  win*)     currentOS="windows";;
-  freebsd*) currentOS="bsd";;
-  bsd*)     currentOS="bsd";;
-  *)        currentOS="unknown";;
+  linux*)   
+    currentOS="linux";;
+  darwin*)
+    currentOS="macosx";;
+  solaris*)
+    currentOS="solaris";;
+  cygwin)
+    currentOS="windows";;
+  win*)
+    currentOS="windows";;
+  freebsd*)
+    currentOS="bsd";;
+  bsd*)
+    currentOS="bsd";;
+  *)
+    currentOS="unknown";;
 esac
 
 #########################################
-###      default config variable      ###
+###  default variable configuration   ###
 #########################################
 
 defaultConfig=app/config/parameters.yml
@@ -57,10 +65,14 @@ version=
 versionDate=
 assetVersionDate=
 
-if [ "$currentOS" == 'macosx' -o "$currentOS" == 'bsd' ] ; then
-    sedcmd="sed -i ''"
-else
-    sedcmd="sed -i"
+#########################################
+###  import variable configuration    ###
+#########################################
+
+CONFIG_FILE=build.conf
+
+if [[ -f $CONFIG_FILE ]]; then
+    . $CONFIG_FILE
 fi
 
 #########################################
@@ -132,6 +144,12 @@ arg1=$1
 ########################################
 ###          Main program            ###
 ########################################
+
+if [ "$currentOS" == 'macosx' -o "$currentOS" == 'bsd' ] ; then
+    sedcmd="sed -i ''"
+else
+    sedcmd="sed -i"
+fi
 
 #get config files from CLI or use default config file
 if [ $# -gt 0 ]; then

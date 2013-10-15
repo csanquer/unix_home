@@ -32,18 +32,26 @@ scriptName=$(basename "$scriptCall")
 #########################################
 
 case "$OSTYPE" in
-  linux*)   currentOS="linux";;
-  darwin*)  currentOS="macosx";;
-  solaris*) currentOS="solaris";;
-  cygwin)   currentOS="windows";;
-  win*)     currentOS="windows";;
-  freebsd*) currentOS="bsd";;
-  bsd*)     currentOS="bsd";;
-  *)        currentOS="unknown";;
+  linux*)   
+    currentOS="linux";;
+  darwin*)
+    currentOS="macosx";;
+  solaris*)
+    currentOS="solaris";;
+  cygwin)
+    currentOS="windows";;
+  win*)
+    currentOS="windows";;
+  freebsd*)
+    currentOS="bsd";;
+  bsd*)
+    currentOS="bsd";;
+  *)
+    currentOS="unknown";;
 esac
 
 #########################################
-###      default config variable      ###
+###  default variable configuration   ###
 #########################################
 
 field=
@@ -51,6 +59,16 @@ createTag=0
 commit=HEAD
 defaultTag=0.1.0
 quiet=0
+
+#########################################
+###  import variable configuration    ###
+#########################################
+
+CONFIG_FILE=build.conf
+
+if [[ -f $CONFIG_FILE ]]; then
+    . $CONFIG_FILE
+fi
 
 #########################################
 ###          options processing       ###

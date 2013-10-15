@@ -28,15 +28,30 @@ scriptDir=$(dirname "$scriptCall")
 scriptName=$(basename "$scriptCall")
 
 #########################################
-###  import variable configuration    ###
+###        OS basic detection         ###
 #########################################
 
-#CONFIG_FILE=my_script.conf
+case "$OSTYPE" in
+  linux*)   
+    currentOS="linux";;
+  darwin*)
+    currentOS="macosx";;
+  solaris*)
+    currentOS="solaris";;
+  cygwin)
+    currentOS="windows";;
+  win*)
+    currentOS="windows";;
+  freebsd*)
+    currentOS="bsd";;
+  bsd*)
+    currentOS="bsd";;
+  *)
+    currentOS="unknown";;
+esac
 
-#if [[ -f $CONFIG_FILE ]]; then
-#    . $CONFIG_FILE
-#fi
-
+#########################################
+###  default variable configuration   ###
 #########################################
 
 phpbin=php
@@ -44,6 +59,20 @@ curlbin=curl
 
 assetOptions='--symlink --relative'
 #assetOptions=''
+
+#########################################
+###  import variable configuration    ###
+#########################################
+
+CONFIG_FILE=build.conf
+
+if [[ -f $CONFIG_FILE ]]; then
+    . $CONFIG_FILE
+fi
+
+########################################
+###          Main program            ###
+########################################
 
 #install vendors
 bash composer.sh
