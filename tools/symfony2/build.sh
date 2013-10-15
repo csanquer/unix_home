@@ -64,10 +64,13 @@ assetOptions='--symlink --relative'
 ###  import variable configuration    ###
 #########################################
 
-CONFIG_FILE=build.conf
+CONFIG_FILE=../build.conf
+CONFIG_FILE_DIST=$CONFIG_FILE.dist
 
 if [[ -f $CONFIG_FILE ]]; then
     . $CONFIG_FILE
+elif [[ -f $CONFIG_FILE_DIST ]]; then
+    . $CONFIG_FILE_DIST
 fi
 
 ########################################
