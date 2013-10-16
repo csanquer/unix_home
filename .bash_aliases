@@ -1,4 +1,5 @@
 #!/bin/sh
+alias bc='bc -l'
 alias vi='vim'
 alias lessvim='/usr/share/vim/vim73/macros/less.sh'
 alias suvi='sudo vim'
