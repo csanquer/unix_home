@@ -85,9 +85,11 @@
 #    tool = meld
 [merge]
     tool = vimdiff
+	defaultToUpstream = true
 #    tool = meld3
 [mergetool "meld3"]
         cmd = $HOME/bin/meld3 $BASE $LOCAL $REMOTE $MERGED
 
 [push]
-	default = matching
+#    default = matching
+	default = upstream
