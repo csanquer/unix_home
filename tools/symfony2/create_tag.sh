@@ -51,14 +51,15 @@ case "$OSTYPE" in
 esac
 
 #########################################
-###  default variable configuration   ###
+###      default config variable      ###
 #########################################
 
-field=
-createTag=0
-commit=HEAD
-defaultTag=0.1.0
-quiet=0
+tagField=
+tagCreate=0
+tagCommit=HEAD
+tagDefault=0.1.0
+tagQuiet=0
+tagAllowSameTag=1
 
 #########################################
 ###  import variable configuration    ###
@@ -82,13 +83,14 @@ function printHelp()
 {
   cat << EOF
 help
-USAGE : $0 [-h] [-f <field>] [-a] [-c <commit>] [-d <default-tag>] [-q]
+USAGE : $0 [-h] [-f <field>] [-a] [-c <commit>] [-d <default-tag>] [-q] [-s]
 options availables : 
   -h : print this help
   -f : version field to increment (patch : v0.0.x , minor : v0.x.0 , major : vx.0.0 )
   -a : create git tag 
   -c : tag to create will refer this commit
   -d : default tag to use 
+  -s : do not allow creating an new tag on the previous tag commit 
   -q : output only the next tag
 EOF
 
@@ -108,7 +110,7 @@ fi
 # example "hcd:o:" => h and c don't require parameter but d and o require parameter
 # var $OPTIND is options index 
 #     $OPTARG is option parameter value 
-while getopts  "hf:ac:d:q" flag
+while getopts  "hf:ac:d:qs" flag
 do
  # debug
  # echo "$flag" $OPTIND $OPTARG
@@ -119,7 +121,7 @@ do
       printHelp 
       ;;  
     f)
-      field=$OPTARG
+      tagField=$OPTARG
       ;;  
     a)
       createTag=1
@@ -158,73 +160,75 @@ arg1=$1
 currentTag=`git describe --tags --abbrev=0 2> /dev/null`
 currentFullTag=`git describe --tags 2> /dev/null`
 
-if [ "$currentTag" != "$currentFullTag" -o -z "$currentTag" ]; then
-    tag=$(echo $currentTag | awk 'match($0, /[0-9]+(\.[0-9]+)+/) { print substr( $0, RSTART, RLENGTH )}')
-    
-    if [[ $quiet -eq 0 ]] ; then
-        #echo current Full Tag : $currentFullTag
-        echo current Tag : $currentTag
-    fi
-    
-    if [[ -n "$tag" ]] ; then 
-        if [ "$field" != 'patch' -a "$field" != 'minor' -a "$field" != 'major' ] ; then 
-            PS3="Please choose a version field to increment : "
-            select option in 'Patch Number (v0.0.x)' 'Minor Version (v0.x.0)' 'Major Version (vx.0.0)'
-            do
-                case "$option" in
-	                'Patch Number (v0.0.x)')
-	                    field="patch"
-                        break
-		                ;;
-                 
-	                'Minor Version (v0.x.0)')
-	                    field=minor
-	                    break
-	                    ;;
-	                'Major Version (vx.0.0)')
-	                    field=major
-	                    break
-		                ;;
-                esac
-            done
+if [[ $tagAllowSameTag -eq 0 ]] ; then
+    if [ "$currentTag" == "$currentFullTag" ]; then
+        if [[ $tagQuiet -eq 0 ]] ; then
+            echo you are already on the latest tag $currentTag
         fi
+        exit 1
+    fi
+fi
 
-        case "$field" in
-	        'patch')
-                nextTag=$(echo $tag | awk 'BEGIN{FS="."} { print $1+0 "." $2+0 "." $3+1;}')
-		        ;;
-         
-	        'minor')
-                nextTag=$(echo $tag | awk 'BEGIN{FS="."} { print $1+0 "." $2+1 ".0";}')
-		        ;;
-         
-	        'major')
-                nextTag=$(echo $tag | awk 'BEGIN{FS="."} { print $1+1 ".0.0";}')
-		        ;;
-        esac
-    else
-        nextTag=$(echo $defaultTag | awk 'match($0, /[0-9]+(\.[0-9]+)+/) { print substr( $0, RSTART, RLENGTH )}')
+
+tag=$(echo $currentTag | awk 'match($0, /[0-9]+(\.[0-9]+)+/) { print substr( $0, RSTART, RLENGTH )}')
+
+if [[ $tagQuiet -eq 0 ]] ; then
+    #echo current Full Tag : $currentFullTag
+    echo current Tag : $currentTag
+fi
+
+if [[ -n "$tag" ]] ; then 
+    if [ "$tagField" != 'patch' -a "$tagField" != 'minor' -a "$tagField" != 'major' ] ; then 
+        PS3="Please choose a version field to increment : "
+        select option in 'Patch Number (v0.0.x)' 'Minor Version (v0.x.0)' 'Major Version (vx.0.0)'
+        do
+            case "$option" in
+                'Patch Number (v0.0.x)')
+                    tagField="patch"
+                    break
+                    ;;
+             
+                'Minor Version (v0.x.0)')
+                    tagField=minor
+                    break
+                    ;;
+                'Major Version (vx.0.0)')
+                    tagField=major
+                    break
+                    ;;
+            esac
+        done
     fi
 
-    nextTag=v$nextTag
-
-    if [[ $quiet -eq 0 ]] ; then
-        echo next Tag : $nextTag
-    else 
-        echo $nextTag
-    fi
-
-    if [[ $createTag -eq 1 ]] ; then
-        if [[ $quiet -eq 0 ]] ; then
-           echo creating tag $nextTag in git repository on commit $commit
-        fi
-        git tag $nextTag $commit -m "$nextTag $field version"
-    fi
+    case "$tagField" in
+        'patch')
+            nextTag=$(echo $tag | awk 'BEGIN{FS="."} { print $1+0 "." $2+0 "." $3+1;}')
+            ;;
+     
+        'minor')
+            nextTag=$(echo $tag | awk 'BEGIN{FS="."} { print $1+0 "." $2+1 ".0";}')
+            ;;
+     
+        'major')
+            nextTag=$(echo $tag | awk 'BEGIN{FS="."} { print $1+1 ".0.0";}')
+            ;;
+    esac
 else
-    if [[ $quiet -eq 0 ]] ; then
-        echo you are already on the latest tag $currentTag
-#    else
-#        echo $currentTag
+    nextTag=$(echo $tagDefault | awk 'match($0, /[0-9]+(\.[0-9]+)+/) { print substr( $0, RSTART, RLENGTH )}')
+fi
+
+nextTag=v$nextTag
+
+if [[ $tagQuiet -eq 0 ]] ; then
+    echo next Tag : $nextTag
+else 
+    echo $nextTag
+fi
+
+if [[ $tagCreate -eq 1 ]] ; then
+    if [[ $tagQuiet -eq 0 ]] ; then
+       echo creating tag $nextTag in git repository on commit $tagCommit
     fi
+    git tag $nextTag $tagCommit -m "$nextTag $tagField version"
 fi
 
