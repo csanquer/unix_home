@@ -21,6 +21,7 @@ return Symfony\CS\Config\Config::create()
         'trailing_spaces',
         'unused_use',
         'phpdoc_params',
+        'function_declaration',
         'visibility',
         'return',
         'short_tag',
