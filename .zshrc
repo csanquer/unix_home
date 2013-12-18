@@ -47,6 +47,9 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
+#my bash aliases
+source $HOME/.bash_aliases
+
 # Customize to your needs...
 export PATH=$PATH:/home/csanquer/bin:/home/csanquer/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
 
