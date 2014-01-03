@@ -60,7 +60,7 @@
     cloner = clone --recursive
     clr = clone --recursive
 # add file to gitignore
-    ignore =!([ ! -e .gitignore ] && touch .gitignore) | echo $1 >>.gitignore
+    ignore ="!sh -c '([ ! -e .gitignore ] && touch .gitignore) | echo $1 >> .gitignore' -"
 # amend last not pushed commit 
     fix = commit --amend
     amend = commit --amend
