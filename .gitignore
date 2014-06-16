@@ -15,6 +15,7 @@ __MACOSX
 .buildpath
 .project
 .cache
+.idea
 nbproject
 .netbeans
 catalog.xml
