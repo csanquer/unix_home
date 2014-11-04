@@ -54,14 +54,14 @@ esac
 ###  default variable configuration   ###
 #########################################
 
-defaultConfig=app/config/parameters.yml
-versionKeyword=version
-versionDateKeyword=version_date
-assetVersionDateKeyword=assets_version
-
 forceDefaultVersion=0
+output=VERSION
 defaultVersion=
 version=
+shortcommit=
+commit=
+branch=
+versionTimestamp=
 versionDate=
 assetVersionDate=
 
@@ -87,11 +87,12 @@ function printHelp()
 {
   cat << EOF
 help
-USAGE : $0 [-h] [-f] [-d <default-version>]
+USAGE : $0 [-h] [-f] [-d <default-version>] [-o <output_ini_file>] [project directory]
 options availables : 
   -h : print this help
   -f : force use of default version if provided
   -d : default version to use
+  -o : output to ini file (default = VERSION)
 EOF
 
   exit
@@ -110,7 +111,7 @@ fi
 # example "hcd:o:" => h and c don't require parameter but d and o require parameter
 # var $OPTIND is options index 
 #     $OPTARG is option parameter value 
-while getopts  "hfd:" flag
+while getopts  "hfd:o:" flag
 do
  # debug
  # echo "$flag" $OPTIND $OPTARG
@@ -125,7 +126,10 @@ do
       ;;  
     d)
       defaultVersion=$OPTARG
-      ;;  
+      ;;
+    o)
+      output=$OPTARG
+      ;;
     # all others cases
     *)
       ;;
@@ -142,24 +146,19 @@ then
   exit 0;
 fi
 
-arg1=$1
+workingDirectory=$1
+if [ -z $1 ]; then
+    workingDirectory=.
+else 
+    workingDirectory=$1
+fi
+
 
 ########################################
 ###          Main program            ###
 ########################################
 
-if [ "$currentOS" == 'macosx' -o "$currentOS" == 'bsd' ] ; then
-    sedcmd="sed -i ''"
-else
-    sedcmd="sed -i"
-fi
-
-#get config files from CLI or use default config file
-if [ $# -gt 0 ]; then
-    configFiles="$@"
-else
-    configFiles=$defaultConfig
-fi
+cd $workingDirectory
 
 # test if git is available
 if ! type "git" > /dev/null 2>&1; then
@@ -169,6 +168,7 @@ else
     if [ -d .git ]; then
         versionDate=`git log -1 --pretty=format:'%ci' --date=local`
         versionTimestamp=`git log -1 --pretty=format:'%ct' --date=local`
+
         if [ $? != 0 ]; then
             if [ "$currentOS" == 'macosx' -o "$currentOS" == 'bsd' ] ; then
                 versionDate=`date "+%F %T %z"`
@@ -185,16 +185,23 @@ else
         fi
 
         #only based on tags
+        shortcommit=`git log -1 --pretty=format:%h 2> /dev/null`
+        commit=`git log -1 --pretty=format:%H 2> /dev/null`
         version=`git describe --tags 2> /dev/null`
         if [ $? != 0 ]; then
-            # refs + commit short hash
-            #version=`git describe --all 2> /dev/null`
-            #hash=`git log -1 --pretty=format:%h 2> /dev/null`
-            #version=$version-$hash
-            
-            # only commit short ash
-            version=`git log -1 --pretty=format:%h 2> /dev/null`
+            version=$shortcommit
         fi
+
+        branch=`( git symbolic-ref --short HEAD 2> /dev/null || git rev-parse --abbrev-ref HEAD 2> /dev/null ) | sed "s#refs/heads/##"`
+        if [ "$branch" == 'HEAD' ]; then
+            describebranch=`git describe --all | sed "s#^\(heads\|remotes/[^/]\+\|tags\)/##"`
+            if [ "$describebranch" == "$version" ]; then
+                branch=DETACHED
+            else
+                branch=$describebranch
+            fi
+        fi
+
     else 
         echo this directory is not a git repository
     fi
@@ -208,17 +215,22 @@ else
     fi
 
     if [ -n "$version" -a -n "$versionDate" ]; then
-        echo Version : $version
-        echo Version Date : $versionDate
-        echo Asset Version Date : $assetVersionDate
-
-        for file in $configFiles
-        do
-            if [ -f $file ]; then
-                $sedcmd 's/^\(\s*\)#\?\(\s*\)\('"$versionKeyword"':\)\s*.*$/\1\2\3 '"\""''"$version"''"\""'/' $file
-                $sedcmd 's/^\(\s*\)#\?\(\s*\)\('"$versionDateKeyword"':\)\s*.*$/\1\2\3 '"\""''"$versionDate"''"\""'/' $file
-                $sedcmd 's/^\(\s*\)#\?\(\s*\)\('"$assetVersionDateKeyword"':\)\s*.*$/\1\2\3 '"\""''"$assetVersionDate"''"\""'/' $file
-            fi
-        done
+        echo "Version :            $version"
+        echo "Branch :             $branch"
+        echo "Short Commit :       $shortcommit"
+        echo "Commit :             $commit"
+        echo "Version timestamp :  $versionTimestamp"
+        echo "Version Date :       $versionDate"
+        echo "Asset Version Date : $assetVersionDate"
+        
+        if [ -n $output ]; then
+        echo "version='$version'
+branch='$branch'
+shortcommit='$shortcommit'
+commit='$commit'
+timestamp='$versionTimestamp'
+isodate='$versionDate'
+assetdate='$assetVersionDate'" > $output
+        fi
     fi
 fi
