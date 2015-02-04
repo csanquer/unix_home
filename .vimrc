@@ -1,5 +1,5 @@
 " use autoload pathogen.vim from https://github.com/tpope/vim-pathogen
-#call pathogen#infect()
+"execute pathogen#infect()
 
 " Basics
 set nocompatible        " must be first line
@@ -72,7 +72,7 @@ endif
 
 set backspace=indent,eol,start  " backspace for dummys
 set linespace=0                 " No extra spaces between rows
-set nu                          " Line numbers on
+set number                      " Line numbers on
 set showmatch                   " show matching brackets/parenthesis
 set incsearch                   " find as you type search
 set hlsearch                    " highlight search terms
