@@ -32,7 +32,7 @@ scriptName=$(basename "$scriptCall")
 #########################################
 
 case "$OSTYPE" in
-  linux*)   
+  linux*)
     currentOS="linux";;
   darwin*)
     currentOS="macosx";;
@@ -88,7 +88,7 @@ function printHelp()
   cat << EOF
 help
 USAGE : $0 [-h] [-f] [-d <default-version>] [-o <output_ini_file>] [project directory]
-options availables : 
+options availables :
   -h : print this help
   -f : force use of default version if provided
   -d : default version to use
@@ -100,7 +100,7 @@ EOF
 }
 
 # check required parameter number
-if [[ $# -lt 0 ]] ; 
+if [[ $# -lt 0 ]] ;
 then
   printHelp;
 fi
@@ -109,21 +109,21 @@ fi
 #
 # pattern => letter = option ; letter with ':' = option with required parameter
 # example "hcd:o:" => h and c don't require parameter but d and o require parameter
-# var $OPTIND is options index 
-#     $OPTARG is option parameter value 
+# var $OPTIND is options index
+#     $OPTARG is option parameter value
 while getopts  "hfd:o:" flag
 do
  # debug
  # echo "$flag" $OPTIND $OPTARG
-  case $flag in  
+  case $flag in
 
     # display help if -h or unknown option
     h|\?)
-      printHelp 
-      ;;  
+      printHelp
+      ;;
     f)
       forceDefaultVersion=1
-      ;;  
+      ;;
     d)
       defaultVersion=$OPTARG
       ;;
@@ -149,7 +149,7 @@ fi
 workingDirectory=$1
 if [ -z $1 ]; then
     workingDirectory=.
-else 
+else
     workingDirectory=$1
 fi
 
@@ -202,7 +202,7 @@ else
             fi
         fi
 
-    else 
+    else
         echo this directory is not a git repository
     fi
 
@@ -222,7 +222,7 @@ else
         echo "Version timestamp :  $versionTimestamp"
         echo "Version Date :       $versionDate"
         echo "Asset Version Date : $assetVersionDate"
-        
+
         if [ -n $output ]; then
         echo "version='$version'
 branch='$branch'
