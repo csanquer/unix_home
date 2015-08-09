@@ -54,7 +54,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="/home/csanquer/bin:/home/csanquer/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+export PATH="$PATH:$HOME/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -102,4 +102,3 @@ else
     PROMPT=$'%{$blue%}%n%{$reset_color%} at %{$orange%}%m%{$reset_color%} in %{$limegreen%}%~%{$reset_color%} $vcs_info_msg_0_
 $(virtualenv_info)$ '
 fi
-
