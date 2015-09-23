@@ -53,7 +53,6 @@ plugins=(git gitfast mercurial npm python ruby rvm screen svn tmux urltools phin
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
-
 export PATH="$PATH:$HOME/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -96,9 +95,10 @@ blue="$fg_bold[blue]"
 white="$fg[white]"
 
 if [ `whoami` = root ]; then
-    PROMPT=$'%{$hotpink%}%n%{$reset_color%} at %{$orange%}%m%{$reset_color%} in %{$limegreen%}%~%{$reset_color%} $vcs_info_msg_0_
-$(virtualenv_info)$ '
+    PROMPT=$'%{$hotpink%}%n%{$reset_color%} at %{$orange%}%m%{$reset_color%} in %{$limegreen%}%~%{$reset_color%} $vcs_info_msg_0_%{$reset_color%}
+$(virtualenv_info)$ %{$reset_color%}'
 else
-    PROMPT=$'%{$blue%}%n%{$reset_color%} at %{$orange%}%m%{$reset_color%} in %{$limegreen%}%~%{$reset_color%} $vcs_info_msg_0_
-$(virtualenv_info)$ '
+    PROMPT=$'%{$blue%}%n%{$reset_color%} at %{$orange%}%m%{$reset_color%} in %{$limegreen%}%~%{$reset_color%} $vcs_info_msg_0_%{$reset_color%}
+$(virtualenv_info)$ %{$reset_color%}'
 fi
+
