@@ -1,0 +1,141 @@
+#!/usr/bin/env python
+
+# Dependencies
+#
+# apt-get install libxml2-dev libxslt1-dev libyaml-dev python-dev python-setuptools
+# easy_install pip
+# pip install iso8601 pyyaml pytz lxml tzlocal
+
+from pprint import pprint,pformat
+
+import argparse
+import os
+import subprocess
+from datetime import datetime
+import iso8601
+import tzlocal
+import re
+import ConfigParser
+import json
+from lxml import etree
+from yaml import load, dump, dump_all, YAMLError
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
+
+def main():
+    parser = argparse.ArgumentParser(description='Get Git commit informations and store them in a INI/XML/YAML/JSON file.')
+    parser.add_argument('commit', nargs='?', type=str, help='git commit to check', default='HEAD')
+    parser.add_argument('--format', metavar='format', type=str, help='output file format and extension (ini/xml/yml/json)', default='json')
+    parser.add_argument('--output', metavar='path', type=str, help='output file path (without extension)', default='version')
+    parser.add_argument('--section', metavar='root', type=str, help='section name in INI file or root tag in XML file', default='app_version')
+
+    args = parser.parse_args()
+
+
+    infos = getGitInfos(args.commit)
+    print 'Git commit :'
+    for key,val in infos.items():
+        print key+' = '+val
+
+    output = os.getcwd()+'/'+args.output
+
+    if args.format == 'yaml' or args.format == 'yml':
+        filepath = output+'.yml'
+        dumpYamlFile(infos, filepath)
+    elif args.format == 'xml':
+        filepath = output+'.xml'
+        dumpXmlFile(infos, filepath, root=args.section)
+    elif args.format == 'ini':
+        filepath = output+'.ini'
+        dumpIniFile(infos, filepath, section=args.section)
+    else:
+        filepath = output+'.json'
+        dumpJsonFile(infos, filepath)
+
+    print "Git commit informations stored in "+filepath
+
+def getGitInfos(commit):
+    rawCommitDate = runCommand(["git", "log", "-1", "--pretty=tformat:%ci", "--no-color", "--date=local", commit] ).strip().replace(' ', 'T', 1).replace(' ', '')
+    abbrevCommit = runCommand(["git", "rev-list", "--max-count=1", "--abbrev-commit", commit]).strip()
+    fullCommit = runCommand(["git", "rev-list", "--max-count=1", "--no-abbrev-commit", commit]).strip()
+    version = runCommand(["git", "describe", "--tag", commit]).strip()
+
+    if version == '' or version is None:
+        version = abbrevCommit
+
+    tz = tzlocal.get_localzone()
+    deployDate = datetime.now(tz)
+    commitDate = iso8601.parse_date(rawCommitDate)
+
+    return {
+        'version': version,
+        'abbrev_commit': abbrevCommit,
+        'full_commit': fullCommit,
+        'commit_date': commitDate.strftime('%Y-%m-%dT%H:%M:%S%z'),
+        'commit_timestamp': commitDate.strftime('%s'),
+        'deploy_date': deployDate.strftime('%Y-%m-%dT%H:%M:%S%z'),
+        'deploy_timestamp': deployDate.strftime('%s')
+    }
+
+def runCommand(args):
+    try:
+        output = subprocess.check_output(args, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError, exc :
+        output = ''
+
+    return output
+
+def makeParentDir(filepath):
+    parentDir = os.path.dirname(filepath)
+    if not os.path.exists(parentDir):
+        os.makedirs(parentDir, 0755)
+
+def dumpIniFile(data, filepath, section='app_version'):
+    makeParentDir(filepath)
+
+    ini = ConfigParser.RawConfigParser()
+    ini.add_section(section)
+    for key,val in data.items():
+        ini.set(section, key, val)
+
+    with open(filepath, 'wb') as f:
+        ini.write(f)
+
+def dumpXmlFile(data, filepath, root='app_version'):
+    makeParentDir(filepath)
+
+    rootNode = etree.Element(root)
+
+    for key,val in data.items():
+        node = etree.SubElement(rootNode, key)
+        node.text = val
+
+    tree = etree.ElementTree(rootNode)
+    tree.write(filepath,  encoding="UTF-8", xml_declaration=True, pretty_print=True)
+
+def dumpJsonFile(data, filepath):
+    makeParentDir(filepath)
+
+    with open(filepath, 'w') as f:
+        json.dump(data, f, indent=4)
+
+def dumpYamlFile(data, filepath):
+    makeParentDir(filepath)
+
+    try:
+        if not data :
+            with open(filepath, 'w') as f:
+                f.write("---\n")
+        else :
+            dump(
+                data,
+                file(filepath, 'w'),
+                default_flow_style=False,
+            )
+    except YAMLError, exc:
+        print "Error Writing YAML file : ", exc
+
+if __name__ == '__main__':
+    main()
