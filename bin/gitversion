@@ -70,9 +70,9 @@ def getGitInfos(commit):
     commitDate = iso8601.parse_date(rawCommitDate)
 
     return {
-        'version': version,
-        'abbrev_commit': abbrevCommit,
-        'full_commit': fullCommit,
+        'version': str(version),
+        'abbrev_commit': str(abbrevCommit),
+        'full_commit': str(fullCommit),
         'commit_date': commitDate.strftime('%Y-%m-%dT%H:%M:%S%z'),
         'commit_timestamp': commitDate.strftime('%s'),
         'deploy_date': deployDate.strftime('%Y-%m-%dT%H:%M:%S%z'),
@@ -133,6 +133,9 @@ def dumpYamlFile(data, filepath):
                 data,
                 file(filepath, 'w'),
                 default_flow_style=False,
+                explicit_start=True,
+                allow_unicode=True,
+                default_style='\'' # force quoting to prevent abbrev_commit to be read as a float
             )
     except YAMLError, exc:
         print "Error Writing YAML file : ", exc
