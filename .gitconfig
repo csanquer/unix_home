@@ -43,7 +43,7 @@
     staged = diff --cached
     dfc = diff --cached
     lg = log --graph
-    lgp = log --graph --pretty=tformat:'%Cred%h%Creset%C(auto)%d%Creset %s %C(blue)(%an)%Creset %Cgreen(%cd - %cr)%Creset' --abbrev-commit --date=local
+    lgp = log --graph --pretty=tformat:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %C(blue)(%an)%Creset %Cgreen(%cd - %cr)%Creset' --abbrev-commit --date=local
     last = log -1 HEAD
     tip = log -n 1 --abbrev-commit --decorate
     changelog-html = log --no-merges --date=short --format='<li id=\"%h\"><time>%ad</time> %s</li>'
