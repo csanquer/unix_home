@@ -69,3 +69,9 @@ alias cmpsrup='cmpsr update --prefer-source'
 alias setsf2acl='sudo setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs; sudo setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs'
 alias setsf2aclmacosx='rm -rf app/cache/*;rm -rf app/logs/*;sudo chmod +a "_www allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs;sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs'
 alias phpnoapc='php -d apc.enable_cli=0'
+alias dk='docker'
+alias dkc='docker-compose'
+alias dkm='docker-machine'
+alias dkrmorph="docker rmi $(docker images | grep '<none>' | tr -s ' ' | cut -d ' ' -f 3)"
+alias pip2upgrade="sudo pip2 freeze --local | grep -v '^\-e' | cut -d = -f 1  | sudo xargs pip2 install -U"
+alias pip3upgrade="sudo pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1  | sudo xargs pip3 install -U"
