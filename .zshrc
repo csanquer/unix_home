@@ -7,7 +7,7 @@ export ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="robbyrussell"
 #ZSH_THEME="bira"
-ZSH_THEME="steeef"
+ZSH_THEME="csa"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -83,22 +83,3 @@ export PATH="$PATH:$HOME/bin"
 
 #my bash aliases
 source $HOME/.bash_aliases
-
-#Custom Prompt
-turquoise="$fg_bold[cyan]"
-orange="$fg_bold[yellow]"
-purple="$fg_bold[magenta]"
-hotpink="$fg_bold[red]"
-limegreen="$fg_bold[green]"
-black="$fg[black]"
-blue="$fg_bold[blue]"
-white="$fg[white]"
-
-if [ `whoami` = root ]; then
-    PROMPT=$'%{$hotpink%}%n%{$reset_color%} at %{$orange%}%m%{$reset_color%} in %{$limegreen%}%~%{$reset_color%} $vcs_info_msg_0_%{$reset_color%}
-$(virtualenv_info)$ %{$reset_color%}'
-else
-    PROMPT=$'%{$blue%}%n%{$reset_color%} at %{$orange%}%m%{$reset_color%} in %{$limegreen%}%~%{$reset_color%} $vcs_info_msg_0_%{$reset_color%}
-$(virtualenv_info)$ %{$reset_color%}'
-fi
-
