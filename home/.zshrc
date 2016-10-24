@@ -55,7 +55,8 @@ ZSH_THEME="csa"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 #plugins=(git)
-plugins=(git gitfast mercurial npm python ruby rvm screen svn tmux urltools phing git-extras symfony2 bower composer debian encode64)
+#plugins=(git gitfast mercurial npm python ruby rvm screen svn tmux urltools phing git-extras symfony2 bower composer debian encode64)
+plugins=(git gitfast npm python screen svn tmux urltools git-extras bowerdebian encode64)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -90,6 +91,3 @@ export PATH="$PATH:$HOME/bin"
 
 #my bash aliases
 source $HOME/.bash_aliases
-
-#AWS cli autocomplete
-source /usr/local/bin/aws_zsh_completer.sh
