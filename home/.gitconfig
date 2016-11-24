@@ -1,6 +1,6 @@
 [user]
-    name = 
-    email = 
+    name =
+    email =
 [color]
     ui = true
 [core]
@@ -11,7 +11,7 @@
 # show aliases
     alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\t=> \\2/' | sort
 # make the current directory a new repo and commit the first import
-    this = !git init && git add . && git commit -m \"initial commit\"   
+    this = !git init && git add . && git commit -m \"initial commit\"
 # shortcuts
     cl = clone
     co = checkout
@@ -29,7 +29,7 @@
     rs = reset
     rv = revert
     pl = pull
-    pr = pull --rebase
+    plr = pull --rebase
     ready = rebase -i @{u}
     ps = push
     sh = show --color-words
@@ -56,13 +56,13 @@
     clr = clone --recursive
 # add file to gitignore
     ignore ="!sh -c '([ ! -e .gitignore ] && touch .gitignore) | echo $1 >> .gitignore' -"
-# amend last not pushed commit 
+# amend last not pushed commit
     fix = commit --amend
     amend = commit --amend
-# remove files from staging area (files to be committed) 
+# remove files from staging area (files to be committed)
     unstage = reset HEAD --
     us = reset HEAD --
-# discard changes (modified files but not to be committed) 
+# discard changes (modified files but not to be committed)
     undo = checkout --
     discard = checkout --
     ds = checkout --
@@ -74,7 +74,7 @@
     #upstream = branch --set-upstream
     # git 1.8 : git upstream remote/branch local_branch
     upstream = branch -u
-    pushtrack = push -u 
+    pushtrack = push -u
 [diff]
     tool = vimdiff
 #    tool = meld
