@@ -71,7 +71,7 @@ alias phpnoapc='php -d apc.enable_cli=0'
 alias dk='docker'
 alias dkc='docker-compose'
 alias dkm='docker-machine'
-alias dkrmvol='docker volume rm $(docker volume ls -q --filter "dangling=true"'
+alias dkrmvol='docker volume rm $(docker volume ls -q --filter "dangling=true")'
 alias dkrmorph='docker rmi $(docker images --filter "dangling=true" -q --no-trunc)'
 alias dkrmexit='docker rm $(docker ps -qa --no-trunc --filter "status=exited")'
 alias pip2upgrade="sudo pip2 freeze --local | grep -v '^\-e' | cut -d = -f 1  | sudo xargs pip2 install -U"
