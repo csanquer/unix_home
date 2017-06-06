@@ -54,18 +54,7 @@ esac
 ###  default variable configuration   ###
 #########################################
 
-#########################################
-###  import variable configuration    ###
-#########################################
-
-CONFIG_FILE=build.conf
-CONFIG_FILE_DIST=$CONFIG_FILE.dist
-
-if [[ -f $CONFIG_FILE ]]; then
-    . $CONFIG_FILE
-elif [[ -f $CONFIG_FILE_DIST ]]; then
-    . $CONFIG_FILE_DIST
-fi
+selfsigned=0
 
 #########################################
 ###          options processing       ###
@@ -76,7 +65,7 @@ function printHelp()
 {
   cat << EOF
 help
-USAGE : $0 [-h] <sslconf>
+USAGE : $0 [-h] [-s] <sslconf>
 
 sslconf : SSL variables config file :
 
@@ -92,6 +81,7 @@ password=
 
 options availables :
   -h    :   print this help
+  -s    :   create a self signed certificate
 EOF
 
   exit
@@ -110,7 +100,7 @@ fi
 # example "hcd:o:" => h and c don't require parameter but d and o require parameter
 # var $OPTIND is options index
 #     $OPTARG is option parameter value
-while getopts  "hc:" flag
+while getopts  "hs" flag
 do
  # debug
  # echo "$flag" $OPTIND $OPTARG
@@ -120,8 +110,9 @@ do
     h|\?)
       printHelp
       ;;
-    #to complete ....
-
+    s)
+      selfsigned=1
+      ;;
     # all others cases
     *)
       ;;
@@ -146,12 +137,8 @@ sslconf=$1
 
 source $sslconf
 
-#Create the request
-echo "Creating CSR"
+echo Self Signed certificate $selfsigned
 mkdir -p $domain
-
-openssl req -nodes -newkey rsa:2048 -keyout $domain/$domain.key -out $domain/$domain.csr -passin pass:$password \
-    -subj "/C=$country/ST=$state/L=$locality/O=$organization/OU=$organizationalunit/CN=$commonname/emailAddress=$email"
 
 cat << EOF | tee $domain/$domain.conf
 domain="$domain"
@@ -165,15 +152,44 @@ email=$email
 password=$password
 EOF
 
-echo "---------------------------"
-echo "-----Below is your CSR-----"
-echo "---------------------------"
-echo
-cat $domain/$domain.csr
+if [ $selfsigned -eq 1 ]; then
+    echo "Generate a new self-signed SSL certificate"
 
-echo
-echo "---------------------------"
-echo "-----Below is your Key-----"
-echo "---------------------------"
-echo
-cat $domain/$domain.key
+    openssl req \
+       -newkey rsa:2048 -nodes -keyout $domain/$domain.key \
+       -x509 -days 365 -out $domain/$domain.crt \
+       -passin pass:$password \
+       -subj "/C=$country/ST=$state/L=$locality/O=$organization/OU=$organizationalunit/CN=$commonname/emailAddress=$email"
+
+   echo "---------------------------------------"
+   echo "-----Below is your CRT Certificate-----"
+   echo "---------------------------------------"
+   echo
+   cat $domain/$domain.crt
+
+   echo
+   echo "---------------------------------------"
+   echo "-----  Below is your Private Key  -----"
+   echo "---------------------------------------"
+   echo
+   cat $domain/$domain.key
+
+else
+    echo "Generate a new SSL certificate private key and request"
+
+    openssl req -nodes -newkey rsa:2048 -keyout $domain/$domain.key -out $domain/$domain.csr -passin pass:$password \
+        -subj "/C=$country/ST=$state/L=$locality/O=$organization/OU=$organizationalunit/CN=$commonname/emailAddress=$email"
+
+    echo "---------------------------------------"
+    echo "-----  Below is your CSR request  -----"
+    echo "---------------------------------------"
+    echo
+    cat $domain/$domain.csr
+
+    echo
+    echo "---------------------------------------"
+    echo "-----  Below is your Private Key  -----"
+    echo "---------------------------------------"
+    echo
+    cat $domain/$domain.key
+fi
