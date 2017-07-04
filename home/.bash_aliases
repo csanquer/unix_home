@@ -58,7 +58,7 @@ alias df='df -hT --total'
 alias wanhost='curl ifconfig.me/host'
 alias wanhost2='wget -q -O- ifconfig.me/host'
 alias wanip='dig +short myip.opendns.com @resolver1.opendns.com'
-alias wanip2='dig TXT +short o-o.myaddr.l.google.com @ns1.google.com | sed "s/\"//g"'
+alias wanip2="dig TXT +short o-o.myaddr.l.google.com @ns1.google.com | tr -d '\"' "
 alias php-cs='php-cs-fixer'
 alias php-cs-fix='php-cs-fixer fix .'
 alias composer='php -d apc.enable_cli=0 /usr/local/bin/composer'
