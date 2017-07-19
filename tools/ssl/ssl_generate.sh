@@ -56,6 +56,17 @@ esac
 
 selfsigned=0
 
+domain=mycompany.example.com
+commonname=$domain
+country=FR
+state=Ile-de-France
+locality=Paris
+organization='My Company'
+organizationalunit=RD
+email=admin@mycompany.example.com
+password=foobar
+bits=2048
+
 #########################################
 ###          options processing       ###
 #########################################
@@ -150,13 +161,14 @@ organization="$organization"
 organizationalunit="$organizationalunit"
 email=$email
 password=$password
+bits=$bits
 EOF
 
 if [ $selfsigned -eq 1 ]; then
     echo "Generate a new self-signed SSL certificate"
 
     openssl req \
-       -newkey rsa:2048 -nodes -keyout $domain/$domain.key \
+       -newkey rsa:$bits -nodes -keyout $domain/$domain.key \
        -x509 -days 365 -out $domain/$domain.crt \
        -passin pass:$password \
        -subj "/C=$country/ST=$state/L=$locality/O=$organization/OU=$organizationalunit/CN=$commonname/emailAddress=$email"
@@ -177,7 +189,7 @@ if [ $selfsigned -eq 1 ]; then
 else
     echo "Generate a new SSL certificate private key and request"
 
-    openssl req -nodes -newkey rsa:2048 -keyout $domain/$domain.key -out $domain/$domain.csr -passin pass:$password \
+    openssl req -nodes -newkey rsa:$bits -keyout $domain/$domain.key -out $domain/$domain.csr -passin pass:$password \
         -subj "/C=$country/ST=$state/L=$locality/O=$organization/OU=$organizationalunit/CN=$commonname/emailAddress=$email"
 
     echo "---------------------------------------"
