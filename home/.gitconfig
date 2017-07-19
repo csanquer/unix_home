@@ -42,7 +42,9 @@
 # diff and log helpers
     staged = diff --cached
     dfc = diff --cached
-    lg = log --graph
+    l = log --graph --oneline --decorate
+    lg = log --graph --oneline --decorate
+    lgf = log --graph
     lgp = log --graph --pretty=tformat:'%C(yellow)%h%Creset%C(auto)%d%Creset %s %C(blue)(%an)%Creset %Cgreen(%cd - %cr)%Creset' --abbrev-commit --date=local
     last = log -1 HEAD
     tip = log -n 1 --abbrev-commit --decorate
