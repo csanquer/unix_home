@@ -84,7 +84,7 @@ alias dkps="docker ps"
 # Get process included stop container
 alias dkpa="docker ps -a"
 # Get images
-alias dki="docker images"
+alias dkim="docker images"
 # Get container IP
 alias dkip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 # Run deamonized container, e.g.: dkd base /bin/echo hello
