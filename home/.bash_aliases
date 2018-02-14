@@ -115,3 +115,6 @@ dkbu() { docker build -t=$1 .; }
 dkalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
 # Bash into running container
 dkbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
+
+#docker-compose logs
+alias dkcl="docker-compose logs -f -t"
