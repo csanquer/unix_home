@@ -7,6 +7,7 @@
     excludesfile = ~/.gitignore
     autocrlf = input
     editor = vim
+    pager = less -F -X
 [alias]
 # show aliases
     alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\t=> \\2/' | sort
@@ -20,6 +21,10 @@
     cim = commit -m
     cia = commit -a
     ciam = commit -am
+    cis = commit -S
+    cism = commit -S -m
+    cisa = commit -S -a
+    cisam = commit -S -am
     cip = commit -p
     ciap = commit -a -p
     st = status
