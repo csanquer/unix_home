@@ -118,3 +118,16 @@ dkbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
 
 #docker-compose logs
 alias dkcl="docker-compose logs -f -t"
+
+
+# ansible
+alias ans="ansible"
+alias ansp="ansible-playbook"
+alias ansc="ansible-config"
+alias ansv="ansible-vault"
+alias ansi="ansible-inventory"
+alias ansg="ansible-galaxy"
+alias ansu="ansible-pull"
+
+# terraform
+alias tf="terraform"
